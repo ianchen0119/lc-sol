@@ -5,11 +5,11 @@
  */
 
 // @lc code=start
-func min(x, y int) int {
+func min(x, y int) (int, bool) {
 	if x > y {
-		return y
+		return y, false
 	}
-	return x
+	return x, true
 }
 
 func max(x, y int) int {
@@ -19,16 +19,18 @@ func max(x, y int) int {
 	return x
 }
 
-func calculate(y0 int, y1 int, height []int, res *int) {
-	minX := min(height[y0], height[y1])
-	*res = max(minX*(y1-y0), *res)
-}
-
 func maxArea(height []int) int {
 	res := 0
-	for y0 := 0; y0 < len(height); y0++ {
-		for y1 := 0; y1 < len(height); y1++ {
-			calculate(y0, y1, height, &res)
+	y0 := 0
+	y1 := len(height) - 1
+	for y0 <= y1 {
+		minX, cond := min(height[y0], height[y1])
+		res = max(minX*(y1-y0), res)
+		// if height[y0] is smaller than height[y1]
+		if cond {
+			y0 += 1
+		} else {
+			y1 -= 1
 		}
 	}
 
