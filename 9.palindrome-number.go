@@ -10,12 +10,11 @@ func isPalindrome(x int) bool {
 		return false
 	}
 	s := strconv.Itoa(x)
-	cond := len(s)
-	for i := 0; i < cond; i++ {
-		if s[i] != s[cond-i-1] {
+	for i := 0; i < len(s); i++ {
+		if s[i] != s[len(s)-i-1] {
 			return false
 		}
-		if i > cond/2 {
+		if i > len(s)/2 {
 			return true
 		}
 	}
