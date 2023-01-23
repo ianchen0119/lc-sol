@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 /*
  * @lc app=leetcode id=15 lang=golang
@@ -9,51 +12,36 @@ import "fmt"
  */
 
 // @lc code=start
-func sort(nums []int) {
-	for i := 0; i < len(nums); i++ {
-		for j := i + 1; j < len(nums); j++ {
-			if nums[i] > nums[j] {
-				temp := nums[i]
-				nums[i] = nums[j]
-				nums[j] = temp
-			}
-		}
-	}
-}
-
-func isDuplicated(nums []int, filter map[string]bool) bool {
-	if len(nums) != 3 {
-		return false
-	}
-	sort(nums)
-	var key string
-	key = fmt.Sprintf("%d%d%d", nums[0], nums[1], nums[2])
-
-	if filter[key] {
-		return true
-	} else {
-		filter[key] = true
-		return false
-	}
-}
 
 func threeSum(nums []int) [][]int {
-	var filter map[string]bool
-	filter = make(map[string]bool)
-	var res [][]int
+	var result [][]int
+	if len(nums) < 3 {
+		return result
+	}
+
+	sort.Ints(nums)
 	for i := 0; i < len(nums); i++ {
-		for j := i + 1; j < len(nums); j++ {
-			for k := j + 1; k < len(nums); k++ {
-				if nums[i]+nums[j]+nums[k] == 0 {
-					slice := []int{nums[i], nums[j], nums[k]}
-					if !isDuplicated(slice, filter) {
-						res = append(res, slice)
-					}
+		if i != 0 && nums[i-1] == nums[i] {
+			continue
+		}
+
+		for k, j := i+1, len(nums)-1; k < j; {
+			n := nums[i] + nums[k] + nums[j]
+			if n == 0 {
+				result = append(result, []int{nums[i], nums[k], nums[j]})
+				l := k
+				for l < j && nums[l] == nums[k] {
+					l++
 				}
+				k = l
+			} else if n > 0 {
+				j--
+			} else {
+				k++
 			}
 		}
 	}
-	return res
+	return result
 }
 
 // @lc code=end
